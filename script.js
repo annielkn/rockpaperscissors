@@ -1,3 +1,8 @@
+const buttons = document.querySelectorAll("button")
+buttons.forEach(btn => {
+  btn.addEventListener("click", playRound);
+});
+
 const beats = {
   rock: "scissors",
   paper: "rock",
@@ -11,43 +16,39 @@ function getComputerChoice(){
     return "scissors";
 }
 
-function getHumanChoice(){
-    let human = prompt("Enter choice here");
-    return human;
+function playRound(event){
+    let humanChoice = event.target.textContent;
+    humanChoice = humanChoice.toLowerCase();
+    const computerChoice = getComputerChoice();
+
+    let result;
+
+    if (humanChoice === computerChoice){
+        result = "Tie";
+    }
+    else if (humanChoice === beats[computerChoice]){
+        computerScore += 1;
+        result = "Computer";
+    }
+    else{
+        humanScore += 1;
+        result = "Human";
+    }
+
+    console.log(`Human: ${humanChoice}, Computer: ${computerChoice}; Result: ${result}`);
+    if (humanScore === 5 || computerScore == 5) endGame();
 }
 
-function playGame(){
-    let humanScore = 0;
-    let computerScore = 0;
-    let winner = "";
-
-    function playRound(humanChoice, computerChoice){
-        humanChoice = humanChoice.toLowerCase()
-        if (humanChoice === computerChoice){
-            return "Tie";
-        }
-        else if (humanChoice == beats[computerChoice]){
-            computerScore += 1;
-            return "Computer";
-        }
-        else{
-            humanScore += 1;
-            return "Human";
-        }
-    }
-
-    for (let i = 0; i < 5; i++){
-        const humanSelection = getHumanChoice();
-        const computerSelection = getComputerChoice();
-        console.log(playRound(humanSelection, computerSelection));
-    }
-
-    if (humanScore = computerScore) winner = "Tie";
+function endGame(){
+    if (humanScore === computerScore) winner = "Tie";
     else if (humanScore > computerScore) winner = "Human";
     else winner = "Computer";
 
     console.log(`Human: ${humanScore}, Computer: ${computerScore}, winner: ${winner}`)
+    humanScore = 0;
+    computerScore = 0;
 }
 
-
-playGame()
+let humanScore = 0;
+let computerScore = 0;
+let winner = "";
